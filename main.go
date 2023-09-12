@@ -28,11 +28,15 @@ func main() {
 		if len(qna) != 2 {
 			continue
 		}
-		question := string(qna[0])
-		answer := string(qna[1])
-		questions = append(questions, question)
-		answers = append(answers, answer)
+		questions = append(questions, qna[0])
+		answers = append(answers, qna[1])
 	}
-	fmt.Println("Questions:", questions)
-	fmt.Println("Answers:", answers)
+
+	for _, question := range questions {
+		fmt.Print(question)
+		var input string
+		fmt.Scan(&input)
+		fmt.Print("You answered %s\n", &input)
+
+	}
 }
