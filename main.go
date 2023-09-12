@@ -32,11 +32,17 @@ func main() {
 		answers = append(answers, qna[1])
 	}
 
-	for _, question := range questions {
-		fmt.Print(question)
+	score := 0
+	for index, question := range questions {
+		fmt.Printf("%s \n", question)
 		var input string
-		fmt.Scan(&input)
-		fmt.Print("You answered %s\n", &input)
-
+		fmt.Scanln(&input)
+		if input == answers[index] {
+			println("Correct")
+			score++
+		} else {
+			println("Wrong")
+		}
 	}
+	fmt.Printf("You got %d points of %d", score, len(answers))
 }
