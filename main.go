@@ -2,9 +2,11 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func check(e error) {
@@ -12,11 +14,12 @@ func check(e error) {
 		panic(e)
 	}
 }
-
 func main() {
+	csvFileName := flag.String("csv", "problems.csv", "A csv file with problems to solve")
+	timeLimit := flag.Int("limit", 10, "Timelimit in seconds")
 	var questions []string
 	var answers []string
-	dat, err := os.Open("problems.csv")
+	dat, err := os.Open(*csvFileName)
 	check(err)
 	defer dat.Close()
 
@@ -32,16 +35,25 @@ func main() {
 		answers = append(answers, qna[1])
 	}
 
+	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 	score := 0
+	fmt.Printf("Good luck timelimit set to %d", timeLimit)
 	for index, question := range questions {
 		fmt.Printf("%s \n", question)
-		var input string
-		fmt.Scanln(&input)
-		if input == answers[index] {
-			println("Correct")
-			score++
-		} else {
-			println("Wrong")
+		answerCh := make(chan string)
+		go func() {
+			var input string
+			fmt.Scanln(&input)
+			answerCh <- input
+		}()
+		select {
+		case <-timer.C:
+			fmt.Printf("\nYou got %d points of %d", score, len(answers))
+			return
+		case input := <-answerCh:
+			if input == answers[index] {
+				score++
+			}
 		}
 	}
 	fmt.Printf("You got %d points of %d", score, len(answers))
