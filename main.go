@@ -16,7 +16,9 @@ func check(e error) {
 }
 func main() {
 	csvFileName := flag.String("csv", "problems.csv", "A csv file with problems to solve")
-	timeLimit := flag.Int("limit", 10, "Timelimit in seconds")
+	timeLimit := flag.Int("time limit", 10, "Timelimit in seconds")
+	flag.Parse()
+	_ = csvFileName
 	var questions []string
 	var answers []string
 	dat, err := os.Open(*csvFileName)
@@ -37,7 +39,7 @@ func main() {
 
 	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 	score := 0
-	fmt.Printf("Good luck timelimit set to %d", timeLimit)
+	fmt.Printf("Timelimit set to %d seconds. Good luck.\n", *timeLimit)
 	for index, question := range questions {
 		fmt.Printf("%s \n", question)
 		answerCh := make(chan string)
