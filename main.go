@@ -18,7 +18,7 @@ func main() {
 	csvFileName := flag.String("csv", "problems.csv", "A csv file with problems to solve")
 	timeLimit := flag.Int("time limit", 10, "Timelimit in seconds")
 	flag.Parse()
-	_ = csvFileName
+
 	var questions []string
 	var answers []string
 	dat, err := os.Open(*csvFileName)
